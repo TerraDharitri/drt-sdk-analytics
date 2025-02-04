@@ -139,7 +139,7 @@ class GithubFetcher(Fetcher):
         }
 
     def _get_github_authorization_header(self) -> Dict[str, Any]:
-        bearer_token = get_environment_var("MX_GITHUB_TOKEN")
+        bearer_token = get_environment_var("DRT_GITHUB_TOKEN")
         return {
             "Authorization": f"Bearer {bearer_token}",
             "Accept": "application/vnd.github.v3+json"

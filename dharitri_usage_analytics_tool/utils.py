@@ -88,7 +88,7 @@ class UserAgentGroup:
 
 
 class UserAgentGroups(Enum):
-    DHARITRI = UserAgentGroup('Dharitri', ['dharitri', 'mx-'])
+    DHARITRI = UserAgentGroup('Dharitri', ['dharitri', 'drt-'])
     PYTHON = UserAgentGroup('Python', ['python'])
     AXIOS = UserAgentGroup('Axios', ['axios'])
     HTTPS = UserAgentGroup('Https', ['^mozilla.*\\+http', '^safari.*\\+http', '^opera.*\\+http'])

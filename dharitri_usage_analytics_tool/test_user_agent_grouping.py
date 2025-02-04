@@ -61,7 +61,7 @@ class TestUserAgentGroups:
         assert UserAgentGroups.get_group(key) == UserAgentGroups.DHARITRI.value
         assert UserAgentGroups.find(key) == key
 
-        key = "dharitri-sdk/proxy/mx-sdk-js-core/tests"
+        key = "dharitri-sdk/proxy/drt-sdk-js-core/tests"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.DHARITRI.value
         assert UserAgentGroups.find(key) == key
 

@@ -1,11 +1,11 @@
-# mx-sdk-analytics
+# drt-sdk-analytics
 Tool for data gathering and analysis on SDKs usage.
 
 ## ENVIRONMENT VARIABLES
 - LIBRARIES_IO_API_KEY (Api key for the libraries.io account)
 - JSON_FOLDER (Folder where generated json files are stored after gathering data from Repository sites - "./Output" for development mode)
 - REPORT_FOLDER (Folder where saved .pdf files are stored)
-- MX_GITHUB_TOKEN (Github fine-grained personal access token that gives access to traffic and community api pages)
+- DRT_GITHUB_TOKEN (Github fine-grained personal access token that gives access to traffic and community api pages)
 - ELASTIC_SEARCH_LOGS_URL, ACCESS_INDEX_NAME  url and name of the index that logs data related to network access
 - ELASTIC_SEARCH_USER, ELASTIC_SEARCH_PASSWORD credentials for accessing the logs index
 
