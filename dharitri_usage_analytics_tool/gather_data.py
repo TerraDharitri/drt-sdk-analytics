@@ -2,32 +2,24 @@ import argparse
 import json
 from pathlib import Path
 
-from dharitri_usage_analytics_tool.ecosystem_configuration import \
-    EcosystemConfiguration
-from dharitri_usage_analytics_tool.elastic_fetcher import \
-    ElasticSearchFetcher
+from dharitri_usage_analytics_tool.ecosystem_configuration import EcosystemConfiguration
+from dharitri_usage_analytics_tool.elastic_fetcher import ElasticSearchFetcher
 from dharitri_usage_analytics_tool.github_fetcher import GithubFetcher
-from dharitri_usage_analytics_tool.package_managers_fetcher import \
-    PackageManagersFetcher
-from dharitri_usage_analytics_tool.utils import (FormattedDate,
-                                                   get_environment_var)
+from dharitri_usage_analytics_tool.package_managers_fetcher import PackageManagersFetcher
+from dharitri_usage_analytics_tool.utils import FormattedDate, get_environment_var
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Fetches data from repository sites for 1 month until end_date.\n Example script: python gather_repository_data --date='2024-05-02'.",
-        epilog='If no arguments are provided, the day before current date is used by default for end_date.\n\n'
+        epilog="If no arguments are provided, the day before current date is used by default for end_date.\n\n",
     )
 
     parser.add_argument(
-        '--date',
-        type=validate_date,
-        help='Runs the script with provided end_date in the format [yyyy-mm-dd].'
+        "--date", type=validate_date, help="Runs the script with provided end_date in the format [yyyy-mm-dd]."
     )
     parser.add_argument(
-        '--week',
-        type=validate_week,
-        help='Runs the script with end_date as sunday of the week provided.'
+        "--week", type=validate_week, help="Runs the script with end_date as sunday of the week provided."
     )
     args = parser.parse_args()
 
@@ -68,7 +60,7 @@ def main():
     el_report_name = Path(rep_folder if rep_folder else ".") / f"yellow{end_date}.json"
     el_report_name.write_text(json.dumps(es_dict_to_write, indent=4))
 
-    print('Data gathered successfully')
+    print("Data gathered successfully")
 
 
 def validate_date(date_str: str):
@@ -78,7 +70,9 @@ def validate_date(date_str: str):
             raise ValueError()
         return date_str
     except ValueError:
-        raise argparse.ArgumentTypeError(f"Not a valid date: '{date_str}'. Expected date before {FormattedDate.now()}, format: YYYY-mm-dd.")
+        raise argparse.ArgumentTypeError(
+            f"Not a valid date: '{date_str}'. Expected date before {FormattedDate.now()}, format: YYYY-mm-dd."
+        )
 
 
 def validate_week(week_str: str):
@@ -90,7 +84,9 @@ def validate_week(week_str: str):
         return week_no
     except ValueError:
         max_week_no = FormattedDate.get_current_week() - 1
-        raise argparse.ArgumentTypeError(f"Not a valid week number: '{week_no}'. Expected number between 0 and {max_week_no}")
+        raise argparse.ArgumentTypeError(
+            f"Not a valid week number: '{week_no}'. Expected number between 0 and {max_week_no}"
+        )
 
 
 if __name__ == "__main__":

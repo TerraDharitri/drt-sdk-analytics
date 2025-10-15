@@ -5,8 +5,12 @@ from elastic_transport._response import ObjectApiResponse
 from elasticsearch import Elasticsearch
 
 from dharitri_usage_analytics_tool.constants import (
-    ELASTICSEARCH_CONNECTIONS_PER_NODE, ELASTICSEARCH_MAX_RETRIES,
-    REQUEST_TIMEOUT, SCAN_BATCH_SIZE, SCROLL_CONSISTENCY_TIME)
+    ELASTICSEARCH_CONNECTIONS_PER_NODE,
+    ELASTICSEARCH_MAX_RETRIES,
+    REQUEST_TIMEOUT,
+    SCAN_BATCH_SIZE,
+    SCROLL_CONSISTENCY_TIME,
+)
 from dharitri_usage_analytics_tool.utils import FormattedDate
 
 
@@ -20,22 +24,20 @@ class Indexer:
             retry_on_timeout=True,
             connections_per_node=ELASTICSEARCH_CONNECTIONS_PER_NODE,
             request_timeout=REQUEST_TIMEOUT,
-            basic_auth=basic_auth
+            basic_auth=basic_auth,
         )
 
-    def count_records(self,
-                      index_name: str,
-                      start_date: Optional[FormattedDate],
-                      end_date: Optional[FormattedDate]
-                      ) -> int:
+    def count_records(
+        self, index_name: str, start_date: Optional[FormattedDate], end_date: Optional[FormattedDate]
+    ) -> int:
         query = self._get_query_object(start_date, end_date)
         return self.elastic_search_client.count(index=index_name, query=query["query"])["count"]
 
     def get_records(
-            self,
-            index_name: str,
-            start_timestamp: Optional[FormattedDate] = None,
-            end_timestamp: Optional[FormattedDate] = None
+        self,
+        index_name: str,
+        start_timestamp: Optional[FormattedDate] = None,
+        end_timestamp: Optional[FormattedDate] = None,
     ) -> Iterable[Dict[str, Any]]:
         query = self._get_query_object(start_timestamp, end_timestamp)
 
@@ -49,17 +51,17 @@ class Indexer:
             size=SCAN_BATCH_SIZE,
             request_timeout=None,
             scroll_kwargs=None,
-            clear_scroll=True
+            clear_scroll=True,
         )
 
         return records
 
     def get_aggregate_records(
-            self,
-            index_name: str,
-            aggregate_key: str = 'user_agent',
-            start_timestamp: Optional[FormattedDate] = None,
-            end_timestamp: Optional[FormattedDate] = None,
+        self,
+        index_name: str,
+        aggregate_key: str = "user_agent",
+        start_timestamp: Optional[FormattedDate] = None,
+        end_timestamp: Optional[FormattedDate] = None,
     ) -> ObjectApiResponse[Any]:
         body = self._get_aggregate_query_object(aggregate_key, start_timestamp, end_timestamp)
 
@@ -77,31 +79,12 @@ class Indexer:
     ) -> Dict[str, Any]:
         query: Dict[str, Any] = {
             "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "exists": {
-                                "field": "user_agent"
-                            }
-                        }
-                    ],
-                    "must_not": [
-                        {
-                            "term": {
-                                "user_agent": ""
-                            }
-                        }
-                    ]
-                }
+                "bool": {"must": [{"exists": {"field": "user_agent"}}], "must_not": [{"term": {"user_agent": ""}}]}
             }
         }
 
         if start_timestamp is not None or end_timestamp is not None:
-            range_filter: Dict[str, Any] = {
-                "range": {
-                    "@timestamp": {}
-                }
-            }
+            range_filter: Dict[str, Any] = {"range": {"@timestamp": {}}}
 
             # Add gte to range filter if start is not None
             if start_timestamp is not None:
@@ -117,10 +100,7 @@ class Indexer:
         return query
 
     def _get_aggregate_query_object(
-        self,
-        key: str,
-        start_timestamp: Optional[FormattedDate],
-        end_timestamp: Optional[FormattedDate]
+        self, key: str, start_timestamp: Optional[FormattedDate], end_timestamp: Optional[FormattedDate]
     ) -> Dict[str, Any]:
         query = self._get_query_object(start_timestamp, end_timestamp)
 
@@ -132,17 +112,13 @@ class Indexer:
                 },
                 "aggs": {
                     "docs_per_day": {
-                        "date_histogram": {
-                            "field": "@timestamp",
-                            "calendar_interval": "day",
-                            "format": "yyyy-MM-dd"
-                        }
+                        "date_histogram": {"field": "@timestamp", "calendar_interval": "day", "format": "yyyy-MM-dd"}
                     }
-                }
+                },
             }
         }
 
-        query['aggs'] = aggregate
+        query["aggs"] = aggregate
         body = {
             **query,
             "size": 0,
@@ -153,4 +129,4 @@ class Indexer:
 
     @staticmethod
     def _to_index_format(date: FormattedDate) -> str:
-        return f'{str(date)}T00:00:00.000Z'
+        return f"{str(date)}T00:00:00.000Z"
