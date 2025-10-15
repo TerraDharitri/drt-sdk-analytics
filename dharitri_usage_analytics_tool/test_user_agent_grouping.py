@@ -5,39 +5,39 @@ class TestUserAgentGroups:
     def test_python_grouping(self):
         key = "python-requests/2.24.0"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.PYTHON.value
-        assert UserAgentGroups.find(key) == 'python-requests/2'
+        assert UserAgentGroups.find(key) == "python-requests/2"
 
         key = "Python/3.11"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.PYTHON.value
-        assert UserAgentGroups.find(key) == 'Python/3'
+        assert UserAgentGroups.find(key) == "Python/3"
 
         key = "Python/3.9 aiohttp/3.9.5"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.PYTHON.value
-        assert UserAgentGroups.find(key) == 'Python/3'
+        assert UserAgentGroups.find(key) == "Python/3"
 
     def test_axios_grouping(self):
         key = "axios/0.26.1"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.AXIOS.value
-        assert UserAgentGroups.find(key) == 'axios/0'
+        assert UserAgentGroups.find(key) == "axios/0"
 
         key = "axios/1.6.7"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.AXIOS.value
-        assert UserAgentGroups.find(key) == 'axios/1'
+        assert UserAgentGroups.find(key) == "axios/1"
 
     def test_okhttp_grouping(self):
         key = "okhttp/3.14.2"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.OKHTTP.value
-        assert UserAgentGroups.find(key) == 'okhttp/3'
+        assert UserAgentGroups.find(key) == "okhttp/3"
 
     def test_apache_grouping(self):
         key = "Apache-HttpClient/4.5.14 (Java/1.8.0_341)"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.APACHE.value
-        assert UserAgentGroups.find(key) == 'Apache-HttpClient/4'
+        assert UserAgentGroups.find(key) == "Apache-HttpClient/4"
 
     def test_curl_grouping(self):
         key = "curl/7.68.0"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.CURL.value
-        assert UserAgentGroups.find(key) == 'curl/7'
+        assert UserAgentGroups.find(key) == "curl/7"
 
         key = "UnityPlayer/2021.3.0f1 (UnityWebRequest/1.0, libcurl/7.80.0-DEV)"
         assert UserAgentGroups.get_group(key) != UserAgentGroups.CURL.value
@@ -61,7 +61,7 @@ class TestUserAgentGroups:
         assert UserAgentGroups.get_group(key) == UserAgentGroups.DHARITRI.value
         assert UserAgentGroups.find(key) == key
 
-        key = "dharitri-sdk/proxy/drt-js-sdk-core/tests"
+        key = "dharitri-sdk/proxy/js-sdk-core/tests"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.DHARITRI.value
         assert UserAgentGroups.find(key) == key
 
@@ -82,7 +82,9 @@ class TestUserAgentGroups:
         assert UserAgentGroups.get_group(key) != UserAgentGroups.BROWSER.value
         key = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
         assert UserAgentGroups.get_group(key) != UserAgentGroups.BROWSER.value
-        key = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot"
+        key = (
+            "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot"
+        )
         assert UserAgentGroups.get_group(key) != UserAgentGroups.BROWSER.value
 
     def test_mobile_grouping(self):
@@ -100,19 +102,21 @@ class TestUserAgentGroups:
     def test_url_grouping(self):
         key = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko)  +https://support.google.com/webmasters/answer/1061943)"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.HTTPS.value
-        assert UserAgentGroups.find(key) == 'URL: https://support.google.com/webmasters/answer/1061943'
+        assert UserAgentGroups.find(key) == "URL: https://support.google.com/webmasters/answer/1061943"
 
         key = "Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.HTTPS.value
-        assert UserAgentGroups.find(key) == 'URL: http://ahrefs.com/robot/'
+        assert UserAgentGroups.find(key) == "URL: http://ahrefs.com/robot/"
 
         key = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/100.0.4896.127 Safari/537.36"
         assert UserAgentGroups.get_group(key) == UserAgentGroups.HTTPS.value
-        assert UserAgentGroups.find(key) == 'URL: http://www.bing.com/bingbot.htm'
+        assert UserAgentGroups.find(key) == "URL: http://www.bing.com/bingbot.htm"
 
-        key = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot"
+        key = (
+            "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot"
+        )
         assert UserAgentGroups.get_group(key) == UserAgentGroups.HTTPS.value
-        assert UserAgentGroups.find(key) == 'URL: https://openai.com/bot'
+        assert UserAgentGroups.find(key) == "URL: https://openai.com/bot"
 
     def test_other_grouping(self):
         key = "@@0GgYP"
